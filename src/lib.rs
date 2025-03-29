@@ -1,14 +1,19 @@
-//extern crate proc_macro;
+#![doc = include_str!("../README.md")]
+
 use proc_macro::{TokenStream, TokenTree};
 use proc_macro2::Ident;
 use quote::quote;
 use syn::{parse_macro_input, parse_quote};
 
+/// Adds `discriminant()` function to get numeric value of enum variants. Also adds
+/// `from_discriminant()` function to create unit type enum variants from discriminants.
+///
+/// The `discriminant()` function relies on casting, as described in the
+/// [Rust language documentation](https://doc.rust-lang.org/std/mem/fn.discriminant.html#accessing-the-numeric-value-of-the-discriminant).
+/// The `from_discriminant()` function on the other hand is basically a `match` statement of with
+/// all the unit type variants.
 #[proc_macro_attribute]
 pub fn discriminant(arguments: TokenStream, item: TokenStream) -> TokenStream {
-    //println!("arguments: \"{arguments}\"");
-    //println!("item: \"{item}\"");
-
     let enum_item = parse_macro_input!(item as syn::ItemEnum);
     let enum_name = &enum_item.ident;
     let (variant_names, discrimnants) = enum_unit_variants(&enum_item);
@@ -17,11 +22,13 @@ pub fn discriminant(arguments: TokenStream, item: TokenStream) -> TokenStream {
     );
     let argument_tokens: proc_macro2::TokenStream = arguments.into();
 
-    let gen = quote! {
+    quote! {
         #[repr(#argument_tokens)]
         #enum_item
 
         impl #enum_name {
+            /// Creates enum variant from discriminant numeric value if there is a unit type variant
+            /// with that value.
             fn from_discriminant(discriminant: #repr_type) -> Option<Self> {
                 match discriminant {
                     // Match arm guard needed in case discriminant is not a literal but
@@ -31,6 +38,8 @@ pub fn discriminant(arguments: TokenStream, item: TokenStream) -> TokenStream {
                     _ => None,
                 }
             }
+
+            /// Returns the discriminant numeric value of an enum variant.
             fn discriminant(&self) -> #repr_type {
                 // See https://doc.rust-lang.org/core/mem/fn.discriminant.html
                 unsafe {
@@ -38,10 +47,8 @@ pub fn discriminant(arguments: TokenStream, item: TokenStream) -> TokenStream {
                 }
             }
         }
-    };
-
-    //println!("gen: \"{gen}\"");
-    gen.into()
+    }
+    .into()
 }
 
 /// Returns the first valid representation type found in the arguments
