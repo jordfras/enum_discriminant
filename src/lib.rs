@@ -17,10 +17,16 @@ pub fn discriminant(arguments: TokenStream, item: TokenStream) -> TokenStream {
     let enum_item = parse_macro_input!(item as syn::ItemEnum);
     let enum_name = &enum_item.ident;
     let (variant_names, discrimnants) = enum_unit_variants(&enum_item);
-    let repr_type = get_repr_type(arguments.clone()).expect(
-        "Valid enum representation type expected as argument to, e.g.,  #[discriminant(u8)]",
-    );
-    let argument_tokens: proc_macro2::TokenStream = arguments.into();
+    let argument_tokens: proc_macro2::TokenStream = arguments.clone().into();
+    let Some(repr_type) = get_repr_type(arguments) else {
+        return syn::Error::new_spanned(
+            argument_tokens,
+            "Valid enum representation type expected as argument to discriminant, \
+            e.g., #[discriminant(u8)]",
+        )
+        .to_compile_error()
+        .into();
+    };
 
     quote! {
         #[repr(#argument_tokens)]
