@@ -38,3 +38,9 @@ fn can_create_unit_variant_from_discrimnant() {
     assert_eq!(None, MyEnum::from_discriminant(42));
     assert_eq!(None, MyEnum::from_discriminant(127));
 }
+
+#[test]
+fn compile_fail() {
+    let t = trybuild::TestCases::new();
+    t.compile_fail("tests/compile-fail/*.rs");
+}

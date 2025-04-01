@@ -1,0 +1,5 @@
+error: Valid enum representation type expected as argument to discriminant, e.g., #[discriminant(u8)]
+ --> tests/compile-fail/unknown_type.rs:3:16
+  |
+3 | #[discriminant(unknown)]
+  |                ^^^^^^^
