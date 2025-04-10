@@ -1,0 +1,19 @@
+error[E0081]: discriminant value `1` assigned more than once
+ --> tests/compile-fail/several_variants_with_same_discriminant.rs:4:1
+  |
+4 | enum SeveralVariantsWithSameDiscriminant {
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5 |     Variant1 = 1,
+  |                - `1` assigned here
+6 |     Variant2 = 1,
+  |                - `1` assigned here
+
+error[E0081]: discriminant value `1` assigned more than once
+  --> tests/compile-fail/several_variants_with_same_discriminant.rs:11:1
+   |
+11 | enum SeveralVariantsWithSameDiscriminantRepr {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+12 |     Variant1 = 1,
+   |                - `1` assigned here
+13 |     Variant2 = 1,
+   |                - `1` assigned here
