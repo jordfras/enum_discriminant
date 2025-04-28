@@ -8,8 +8,6 @@ description = """
 Procedural macro to add functions on enum types to get discrimnant value from variant or create
 unit variant from discriminant value.
 """
-documentation = "https://github.com/jordfras/enum_discriminant"
-homepage = "https://github.com/jordfras/enum_discriminant"
 repository = "https://github.com/jordfras/enum_discriminant"
 keywords = ["enum", "discriminant", "ordinal"]
 categories = ["rust-patterns"]
