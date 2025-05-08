@@ -14,6 +14,7 @@ categories = ["rust-patterns"]
 exclude = ["/.github/"]
 
 [dependencies]
+enum_discriminant_traits = { version = "=0.1.0", path = "traits" }
 enum_discriminant_macro = { version = "=0.1.0", path = "macro" }
 
 [dev-dependencies]

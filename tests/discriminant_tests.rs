@@ -1,4 +1,5 @@
 use enum_discriminant::discriminant;
+use enum_discriminant::IntoDiscriminant;
 
 #[discriminant(u8)]
 #[derive(Debug, PartialEq)]
@@ -178,5 +179,5 @@ fn c_repr_enum_works() {
 #[test]
 fn compile_fail() {
     let t = trybuild::TestCases::new();
-    t.compile_fail("tests/compile-fail/*.rs");
+    t.compile_fail("tests/compile-fail/ *.rs");
 }
