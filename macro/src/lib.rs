@@ -18,7 +18,7 @@ macro_rules! compile_error_unless_ok {
 /// The `discriminant()` function relies on casting, as described in the
 /// [Rust language documentation](https://doc.rust-lang.org/std/mem/fn.discriminant.html#accessing-the-numeric-value-of-the-discriminant).
 /// The `from_discriminant()` function on the other hand is basically a `match` statement
-/// of with all the unit type variants.
+/// with all the unit type variants.
 #[proc_macro_attribute]
 pub fn discriminant(arguments: TokenStream, item: TokenStream) -> TokenStream {
     let enum_item = parse_macro_input!(item as syn::ItemEnum);
@@ -54,7 +54,7 @@ pub fn derive_into_discriminant(item: TokenStream) -> TokenStream {
     let input = parse_macro_input!(item as syn::DeriveInput);
     let enum_name = &input.ident;
 
-    let repr_args = compile_error_unless_ok!(get_repr_args(&input));
+    let repr_args = compile_error_unless_ok!(get_repr_args("IntoDiscriminant", &input));
     let repr_type = compile_error_unless_ok!(get_repr_type(repr_args));
 
     let discriminant_code = generate_discriminant_function(&repr_type);
@@ -64,6 +64,34 @@ pub fn derive_into_discriminant(item: TokenStream) -> TokenStream {
             type DiscriminantType = #repr_type;
 
             #discriminant_code
+        }
+    }
+    .into()
+}
+
+/// Derive macro generating an impl for the `FromDiscriminant` trait for enums. The trait
+/// adds `from_discriminant()` function to create unit type enum variants from
+/// discriminants.
+///
+/// The `from_discriminant()` function is basically a `match` statement with all the unit
+/// type variants.
+#[proc_macro_derive(FromDiscriminant)]
+pub fn derive_from_discriminant(item: TokenStream) -> TokenStream {
+    let cloned_item = item.clone();
+    let input = parse_macro_input!(item as syn::DeriveInput);
+    let enum_item = parse_macro_input!(cloned_item as syn::ItemEnum);
+    let enum_name = &enum_item.ident;
+
+    let repr_args = compile_error_unless_ok!(get_repr_args("FromDiscriminant", &input));
+    let repr_type = compile_error_unless_ok!(get_repr_type(repr_args));
+
+    let from_discriminant_code = generate_from_discriminant_function(&repr_type, &enum_item);
+
+    quote! {
+        impl FromDiscriminant for #enum_name {
+            type DiscriminantType = #repr_type;
+
+            #from_discriminant_code
         }
     }
     .into()
@@ -102,7 +130,7 @@ fn get_repr_type(arguments: TokenStream2) -> Result<syn::Path, syn::Error> {
 
 // Finds the first `repr` or `discriminant` attribute in the input and returns its
 // arguments. This is used to determine the representation type of the enum.
-fn get_repr_args(input: &syn::DeriveInput) -> Result<TokenStream2, syn::Error> {
+fn get_repr_args(macro_name: &str, input: &syn::DeriveInput) -> Result<TokenStream2, syn::Error> {
     let x = input
         .attrs
         .iter()
@@ -116,8 +144,11 @@ fn get_repr_args(input: &syn::DeriveInput) -> Result<TokenStream2, syn::Error> {
         .ok_or_else(|| {
             syn::Error::new_spanned(
                 input,
-                "When deriving IntoDiscriminant on an enum, you also need to specify \
-                 representation type with #[repr()] or #[discriminant()]",
+                format!(
+                    "When deriving {} on an enum, you also need to specify \
+                     representation type with #[repr()] or #[discriminant()]",
+                    macro_name
+                ),
             )
         })?;
     Ok(x.tokens.clone())

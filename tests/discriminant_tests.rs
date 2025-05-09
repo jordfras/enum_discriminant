@@ -1,4 +1,5 @@
 use enum_discriminant::discriminant;
+use enum_discriminant::FromDiscriminant;
 use enum_discriminant::IntoDiscriminant;
 
 #[discriminant(u8)]
@@ -240,6 +241,82 @@ fn derive_into_discriminant_works_with_repr_macro_before() {
 
     assert_eq!(17, via_trait(&MyEnum::Unit));
     assert_eq!(18, via_trait(&MyEnum::Tuple(4)));
+}
+
+#[test]
+fn derive_from_discriminant_works_with_discriminant_macro_after() {
+    #[derive(Debug, PartialEq, FromDiscriminant)]
+    #[discriminant(u8)]
+    enum MyEnum {
+        Unit = 17,
+        #[allow(dead_code)]
+        Tuple(String) = 42,
+    }
+
+    fn via_trait<T: FromDiscriminant<DiscriminantType = u8>>(discriminant: u8) -> Option<T> {
+        T::from_discriminant(discriminant)
+    }
+
+    assert_eq!(Some(MyEnum::Unit), via_trait::<MyEnum>(17));
+    assert_eq!(None, via_trait::<MyEnum>(42));
+    assert_eq!(None, via_trait::<MyEnum>(127));
+}
+
+#[test]
+fn derive_from_discriminant_works_with_discriminant_macro_before() {
+    #[discriminant(u8)]
+    #[derive(Debug, PartialEq, FromDiscriminant)]
+    enum MyEnum {
+        Unit = 17,
+        #[allow(dead_code)]
+        Tuple(String) = 42,
+    }
+
+    fn via_trait<T: FromDiscriminant<DiscriminantType = u8>>(discriminant: u8) -> Option<T> {
+        T::from_discriminant(discriminant)
+    }
+
+    assert_eq!(Some(MyEnum::Unit), via_trait::<MyEnum>(17));
+    assert_eq!(None, via_trait::<MyEnum>(42));
+    assert_eq!(None, via_trait::<MyEnum>(127));
+}
+
+#[test]
+fn derive_from_discriminant_works_with_repr_macro_after() {
+    #[derive(Debug, PartialEq, FromDiscriminant)]
+    #[repr(u8)]
+    enum MyEnum {
+        Unit = 17,
+        #[allow(dead_code)]
+        Tuple(String) = 42,
+    }
+
+    fn via_trait<T: FromDiscriminant<DiscriminantType = u8>>(discriminant: u8) -> Option<T> {
+        T::from_discriminant(discriminant)
+    }
+
+    assert_eq!(Some(MyEnum::Unit), via_trait::<MyEnum>(17));
+    assert_eq!(None, via_trait::<MyEnum>(42));
+    assert_eq!(None, via_trait::<MyEnum>(127));
+}
+
+#[test]
+fn derive_from_discriminant_works_with_repr_macro_before() {
+    #[repr(u8)]
+    #[derive(Debug, PartialEq, FromDiscriminant)]
+    enum MyEnum {
+        Unit = 17,
+        #[allow(dead_code)]
+        Tuple(String) = 42,
+    }
+
+    fn via_trait<T: FromDiscriminant<DiscriminantType = u8>>(discriminant: u8) -> Option<T> {
+        T::from_discriminant(discriminant)
+    }
+
+    assert_eq!(Some(MyEnum::Unit), via_trait::<MyEnum>(17));
+    assert_eq!(None, via_trait::<MyEnum>(42));
+    assert_eq!(None, via_trait::<MyEnum>(127));
 }
 
 #[test]
