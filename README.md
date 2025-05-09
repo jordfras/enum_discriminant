@@ -110,6 +110,12 @@ There are similar, popular crates, including:
 - [enum-ordinalize](https://crates.io/crates/enum-ordinalize)
 - [enum-repr](https://crates.io/crates/enum-repr)
 - [num_enum](https://crates.io/crates/num_enum)
+- [strum](https://https://crates.io/crates/strum)
 
-All of these alternatives only support unit type enum variants. There are likely many other
-similar crates with overlapping or identical functionality as this one.
+The first three alternatives only support unit type enum variants. Strum has `FromRepr` which can
+create variants holding data, as long as it implements `Default`. It also has `IntoDiscriminant`
+to convert variants to disrciminant identifiers rather than its numerical value.
+
+There are likely many other similar crates with overlapping or identical functionalit
+as this one.
+
