@@ -1,11 +1,11 @@
 [package]
-name = "enum_discriminant_macro"
-version = "0.1.0"
+name = "enum_discriminant_macros"
+version = "1.0.0"
 edition = "2021"
 license = "MIT"
 authors = ["Thomas Johannesson"]
 description = """
-Internal implementation of procedural macro for enum_discriminant crate
+Internal implementation of procedural macros for enum_discriminant crate
 """
 repository = "https://github.com/jordfras/enum_discriminant"
 
@@ -13,9 +13,9 @@ repository = "https://github.com/jordfras/enum_discriminant"
 quote = "1.0"
 syn = { version = "2.0", features = ["full"] }
 proc-macro2 = "1.0"
-enum_discriminant_traits = { version = "=0.1.0", path = "../traits" }
+enum_discriminant_traits = { version = "=1.0.0", path = "../traits" }
 
 [lib]
-name = "enum_discriminant_macro"
+name = "enum_discriminant_macros"
 path = "src/lib.rs"
 proc-macro = true
