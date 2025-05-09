@@ -1,0 +1,10 @@
+[package]
+name = "enum_discriminant_traits"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+authors = ["Thomas Johannesson"]
+description = """
+Internal implementation of traits for enum_discriminant crate
+"""
+repository = "https://github.com/jordfras/enum_discriminant"
