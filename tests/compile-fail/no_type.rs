@@ -1,7 +1,7 @@
 use enum_discriminant::discriminant;
 
-#[discriminant(unknown)]
-enum EnumWithUnknownType {
+#[discriminant()]
+enum EnumWithNoType {
     Unit = 17,
 }
 

@@ -8,22 +8,14 @@ description = """
 Procedural macro to add functions on enum types to get discrimnant value from variant or create
 unit variant from discriminant value.
 """
-documentation = "https://github.com/jordfras/enum_discriminant"
-homepage = "https://github.com/jordfras/enum_discriminant"
 repository = "https://github.com/jordfras/enum_discriminant"
 keywords = ["enum", "discriminant", "ordinal"]
 categories = ["rust-patterns"]
 exclude = ["/.github/"]
 
 [dependencies]
-quote = "1.0"
-syn = { version = "2.0", features = ["full"] }
-proc-macro2 = "1.0"
+enum_discriminant_traits = { version = "=0.1.0", path = "traits" }
+enum_discriminant_macro = { version = "=0.1.0", path = "macro" }
 
 [dev-dependencies]
 trybuild = "1.0"
-
-[lib]
-name = "enum_discriminant"
-path = "src/lib.rs"
-proc-macro = true

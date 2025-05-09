@@ -1,0 +1,7 @@
+error: When deriving FromDiscriminant on an enum, you also need to specify representation type with #[repr()] or #[discriminant()]
+ --> tests/compile-fail/derive_from_discriminant_without_repr.rs:4:1
+  |
+4 | / enum MyEnum {
+5 | |     Variant,
+6 | | }
+  | |_^

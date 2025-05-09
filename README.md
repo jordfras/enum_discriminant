@@ -1,7 +1,10 @@
-# enum_discriminant
+enum_discriminant
+=================
+
 Procedural macro for enum types to convert between variant and discriminant and vice versa.
 
-# Added functions
+
+## Added functions
 When the procedural macro is used on an enum, you can get the discriminant, i.e., the numeric value
 or ordinal, of a variant with the function `discrimnant()`. The other way around, variants can be
 created with the function `from_discrimnant()`.
@@ -55,7 +58,53 @@ assert_eq!(None, MyEnum::from_discriminant(2));
 
 ```
 
-# Alternatives
+
+## Traits
+Sometimes you may need to add the functions as traits, rather than directly on the enum. For this
+purpose the crate provides the traits `IntoDiscriminant` and `FromDiscriminant` and corresponding
+derive macros. You need to specify the representation integer type either with `#[discriminant()]`
+or`#[repr()]`  for these to work.
+
+`IntoDiscriminant` may be used like this:
+```rust
+use enum_discriminant::discriminant;
+use enum_discriminant::IntoDiscriminant;
+
+#[discriminant(u8)]
+#[derive(IntoDiscriminant)]
+enum MyEnum {
+    Unit = 17,
+}
+
+fn double_discriminant(variant: &dyn IntoDiscriminant<DiscriminantType = u8>) -> u8 {
+    variant.discriminant() * 2
+}
+
+assert_eq!(2 * 17, double_discriminant(&MyEnum::Unit));
+```
+
+And `FromDiscriminant` may be used like this:
+```rust
+use enum_discriminant::discriminant;
+use enum_discriminant::FromDiscriminant;
+
+#[discriminant(u8)]
+#[derive(Debug, PartialEq, FromDiscriminant)]
+enum MyEnum {
+    Unit = 17,
+}
+
+fn from_double_discriminant<T: FromDiscriminant<DiscriminantType = u8>>(
+    double_discriminant: u8,
+) -> Option<T> {
+    T::from_discriminant(double_discriminant / 2)
+}
+
+assert_eq!(Some(MyEnum::Unit), from_double_discriminant(2 * 17));
+```
+
+
+## Alternatives
 There are similar, popular crates, including:
 
 - [enum-ordinalize](https://crates.io/crates/enum-ordinalize)
