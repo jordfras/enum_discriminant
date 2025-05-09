@@ -94,8 +94,8 @@ fn get_repr_type(arguments: TokenStream2) -> Result<syn::Path, syn::Error> {
         .ok_or_else(|| {
             syn::Error::new_spanned(
                 arguments,
-                "Valid enum representation type expected as argument to discriminant, \
-                 e.g., #[discriminant(u8)]",
+                "Valid enum representation type expected as argument to the discriminant \
+                 macro, e.g., #[discriminant(u8)]",
             )
         })
 }
@@ -116,7 +116,7 @@ fn get_repr_args(input: &syn::DeriveInput) -> Result<TokenStream2, syn::Error> {
         .ok_or_else(|| {
             syn::Error::new_spanned(
                 input,
-                "When deriving IntoDiscriminant on an enum, you also need to specify \"
+                "When deriving IntoDiscriminant on an enum, you also need to specify \
                  representation type with #[repr()] or #[discriminant()]",
             )
         })?;

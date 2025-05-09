@@ -177,7 +177,73 @@ fn c_repr_enum_works() {
 }
 
 #[test]
+fn derive_into_discriminant_works_with_discriminant_macro_before() {
+    #[discriminant(u8)]
+    #[derive(Debug, PartialEq, IntoDiscriminant)]
+    enum MyEnum {
+        Unit = 17,
+        Tuple(u32),
+    }
+
+    fn via_trait(t: &dyn IntoDiscriminant<DiscriminantType = u8>) -> u8 {
+        t.discriminant()
+    }
+    assert_eq!(17, via_trait(&MyEnum::Unit));
+    assert_eq!(18, via_trait(&MyEnum::Tuple(4)));
+}
+
+#[test]
+fn derive_into_discriminant_works_with_discriminant_macro_after() {
+    #[derive(Debug, PartialEq, IntoDiscriminant)]
+    #[discriminant(u8)]
+    enum MyEnum {
+        Unit = 17,
+        Tuple(u32),
+    }
+
+    fn via_trait(t: &dyn IntoDiscriminant<DiscriminantType = u8>) -> u8 {
+        t.discriminant()
+    }
+    assert_eq!(17, via_trait(&MyEnum::Unit));
+    assert_eq!(18, via_trait(&MyEnum::Tuple(4)));
+}
+
+#[test]
+fn derive_into_discriminant_works_with_repr_macro_after() {
+    #[derive(Debug, PartialEq, IntoDiscriminant)]
+    #[repr(u8)]
+    enum MyEnum {
+        Unit = 17,
+        Tuple(u32),
+    }
+
+    fn via_trait(t: &dyn IntoDiscriminant<DiscriminantType = u8>) -> u8 {
+        t.discriminant()
+    }
+
+    assert_eq!(17, via_trait(&MyEnum::Unit));
+    assert_eq!(18, via_trait(&MyEnum::Tuple(4)));
+}
+
+#[test]
+fn derive_into_discriminant_works_with_repr_macro_before() {
+    #[repr(u8)]
+    #[derive(Debug, PartialEq, IntoDiscriminant)]
+    enum MyEnum {
+        Unit = 17,
+        Tuple(u32),
+    }
+
+    fn via_trait(t: &dyn IntoDiscriminant<DiscriminantType = u8>) -> u8 {
+        t.discriminant()
+    }
+
+    assert_eq!(17, via_trait(&MyEnum::Unit));
+    assert_eq!(18, via_trait(&MyEnum::Tuple(4)));
+}
+
+#[test]
 fn compile_fail() {
     let t = trybuild::TestCases::new();
-    t.compile_fail("tests/compile-fail/ *.rs");
+    t.compile_fail("tests/compile-fail/*.rs");
 }
