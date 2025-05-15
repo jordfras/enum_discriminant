@@ -12,13 +12,13 @@ macro_rules! compile_error_unless_ok {
     };
 }
 
-/// Adds `discriminant()` function to get numeric value of enum variants. Also adds
-/// `from_discriminant()` function to create unit type enum variants from discriminants.
+/// Adds a `discriminant()` function to get the numeric value of enum variants. Also adds
+/// a `from_discriminant()` function to create unit type enum variants from discriminants.
 ///
 /// The `discriminant()` function relies on casting, as described in the
 /// [Rust language documentation](https://doc.rust-lang.org/std/mem/fn.discriminant.html#accessing-the-numeric-value-of-the-discriminant).
-/// The `from_discriminant()` function on the other hand is basically a `match` statement
-/// with all the unit type variants.
+/// The `from_discriminant()` function, on the other hand, is essentially a `match`
+/// statement with all the unit type variants.
 #[proc_macro_attribute]
 pub fn discriminant(arguments: TokenStream, item: TokenStream) -> TokenStream {
     let enum_item = parse_macro_input!(item as syn::ItemEnum);
@@ -45,7 +45,7 @@ pub fn discriminant(arguments: TokenStream, item: TokenStream) -> TokenStream {
 }
 
 /// Derive macro generating an impl for the `IntoDiscriminant` trait for enums. The trait
-/// adds a `discriminant()` function to get numeric value of enum variants.
+/// adds a `discriminant()` function to get the numeric value of enum variants.
 ///
 /// The `discriminant()` function relies on casting, as described in the
 /// [Rust language documentation](https://doc.rust-lang.org/std/mem/fn.discriminant.html#accessing-the-numeric-value-of-the-discriminant).
@@ -70,11 +70,11 @@ pub fn derive_into_discriminant(item: TokenStream) -> TokenStream {
 }
 
 /// Derive macro generating an impl for the `FromDiscriminant` trait for enums. The trait
-/// adds `from_discriminant()` function to create unit type enum variants from
+/// adds a `from_discriminant()` function to create unit type enum variants from
 /// discriminants.
 ///
-/// The `from_discriminant()` function is basically a `match` statement with all the unit
-/// type variants.
+/// The `from_discriminant()` function is essentially a `match` statement with all the
+/// unit type variants.
 #[proc_macro_derive(FromDiscriminant)]
 pub fn derive_from_discriminant(item: TokenStream) -> TokenStream {
     let cloned_item = item.clone();
@@ -185,8 +185,8 @@ fn generate_from_discriminant_function(
     let enum_name = &enum_item.ident;
 
     quote! {
-        /// Creates enum variant from discriminant numeric value if there is a unit type variant
-        /// with that value.
+        /// Creates an enum variant from a discriminant numeric value if there is a unit
+        /// type variant with that value.
         fn from_discriminant(discriminant: #repr_type) -> Option<Self> {
             match discriminant {
                 // Match arm guard needed in case discriminant is not a literal but

@@ -1,6 +1,6 @@
 [package]
 name = "enum_discriminant_macros"
-version = "1.0.0"
+version = "1.0.1"
 edition = "2021"
 license = "MIT"
 authors = ["Thomas Johannesson"]
@@ -13,7 +13,7 @@ repository = "https://github.com/jordfras/enum_discriminant"
 quote = "1.0"
 syn = { version = "2.0", features = ["full"] }
 proc-macro2 = "1.0"
-enum_discriminant_traits = { version = "=1.0.0", path = "../traits" }
+enum_discriminant_traits = { version = "=1.0.1", path = "../traits" }
 
 [lib]
 name = "enum_discriminant_macros"

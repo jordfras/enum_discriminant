@@ -1,6 +1,6 @@
 [package]
 name = "enum_discriminant"
-version = "1.0.0"
+version = "1.0.1"
 edition = "2021"
 license = "MIT"
 authors = ["Thomas Johannesson"]
@@ -14,8 +14,8 @@ categories = ["rust-patterns"]
 exclude = ["/.github/"]
 
 [dependencies]
-enum_discriminant_traits = { version = "=1.0.0", path = "traits" }
-enum_discriminant_macros = { version = "=1.0.0", path = "macros" }
+enum_discriminant_traits = { version = "=1.0.1", path = "traits" }
+enum_discriminant_macros = { version = "=1.0.1", path = "macros" }
 
 [dev-dependencies]
 trybuild = "1.0"

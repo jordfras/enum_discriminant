@@ -6,8 +6,8 @@ Procedural macro for enum types to convert between variant and discriminant and 
 
 ## Added functions
 When the procedural macro is used on an enum, you can get the discriminant, i.e., the numeric value
-or ordinal, of a variant with the function `discrimnant()`. The other way around, variants can be
-created with the function `from_discrimnant()`.
+or ordinal, of a variant with the function `discriminant()`. The other way around, variants can be
+created with the function `from_discriminant()`.
 
 ```rust
 use enum_discriminant::discriminant;
@@ -28,7 +28,6 @@ assert_eq!(Some(MyEnum::Zero), MyEnum::from_discriminant(0));
 assert_eq!(None, MyEnum::from_discriminant(1));
 assert_eq!(Some(MyEnum::Two), MyEnum::from_discriminant(2));
 assert_eq!(Some(MyEnum::Three), MyEnum::from_discriminant(3));
-
 ```
 
 The macro requires you to specify an integer type and will behave the same as `#[repr()]`.
@@ -110,12 +109,12 @@ There are similar, popular crates, including:
 - [enum-ordinalize](https://crates.io/crates/enum-ordinalize)
 - [enum-repr](https://crates.io/crates/enum-repr)
 - [num_enum](https://crates.io/crates/num_enum)
-- [strum](https://https://crates.io/crates/strum)
+- [strum](https://crates.io/crates/strum)
 
 The first three alternatives only support unit type enum variants. Strum has `FromRepr` which can
 create variants holding data, as long as it implements `Default`. It also has `IntoDiscriminant`
 to convert variants to disrciminant identifiers rather than its numerical value.
 
-There are likely many other similar crates with overlapping or identical functionalit
+There are likely many other similar crates with overlapping or identical functionality
 as this one.
 

@@ -1,3 +1,5 @@
 Cargo.lock
 /target/
 /.vscode/
+/macros/target/
+/traits/target/
